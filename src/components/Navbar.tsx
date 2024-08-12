@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+// src/components/Navbar.tsx
+import React, { useContext, useState } from "react";
 import { NavItems } from "../data";
 import { X, Menu } from "lucide-react";
+import AuthContext from '../context/AuthContext';
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const { isAuthenticated, user, logout } = useContext(AuthContext);
   const toggleNavbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
   };
@@ -23,15 +26,25 @@ const Navbar = () => {
             ))}
           </ul>
           <div className="hidden lg:flex justify-center space-x-12 items-center">
-            <a href="#" className="py-2 px-3 border rouned-md">
-              Login
-            </a>
-            <a
-              href="#"
-              className="bg-gradient-to-r from-green-500 to-green-800 py-2 px-3 rouned-md"
-            >
-              Registrar
-            </a>
+            {isAuthenticated ? (
+              <button
+                onClick={logout}
+                className="py-2 px-3 rounded-md"
+              >
+                <img
+                  src={`https://i.pravatar.cc/150?u=${user?.role}`}
+                  alt="User Avatar"
+                  className="w-8 h-8 rounded-full"
+                />
+              </button>
+            ) : (
+              <a
+                href="/login"
+                className="bg-gradient-to-r from-green-500 to-green-800 py-2 px-3 rounded-md"
+              >
+                Login
+              </a>
+            )}
           </div>
           <div className="lg:hidden md:flex flex-col justify-end">
             <button onClick={toggleNavbar}>
@@ -49,15 +62,25 @@ const Navbar = () => {
               ))}
             </ul>
             <div className="flex space-x-6">
-              <a href="#" className="py-2 px-3 border rounded-md">
-                Login
-              </a>
-              <a
-                href="#"
-                className="py-2 px-3 border rounded-md bg-gradient-to-r from-green-500 to-green-800"
-              >
-                Registrar
-              </a>
+              {isAuthenticated ? (
+                <button
+                  onClick={logout}
+                  className="py-2 px-3 rounded-md"
+                >
+                  <img
+                    src={`https://i.pravatar.cc/150?u=${user?.role}`}
+                    alt="User Avatar"
+                    className="w-8 h-8 rounded-full"
+                  />
+                </button>
+              ) : (
+                <a
+                  href="/login"
+                  className="py-2 px-3 border rounded-md bg-gradient-to-r from-green-500 to-green-800"
+                >
+                  Login
+                </a>
+              )}
             </div>
           </div>
         )}
