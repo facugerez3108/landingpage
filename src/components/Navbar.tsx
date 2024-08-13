@@ -1,4 +1,3 @@
-// src/components/Navbar.tsx
 import React, { useContext, useState } from "react";
 import { NavItems } from "../data";
 import { X, Menu } from "lucide-react";
@@ -6,9 +5,15 @@ import AuthContext from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const { isAuthenticated, user, logout } = useContext(AuthContext);
+
   const toggleNavbar = () => {
     setMobileDrawerOpen(!mobileDrawerOpen);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
   return (
@@ -25,18 +30,32 @@ const Navbar: React.FC = () => {
               </li>
             ))}
           </ul>
-          <div className="hidden lg:flex justify-center space-x-12 items-center">
+          <div className="hidden lg:flex justify-center space-x-12 items-center relative">
             {isAuthenticated ? (
-              <button
-                onClick={logout}
-                className="py-2 px-3 rounded-md"
-              >
-                <img
-                  src={`https://i.pravatar.cc/150?u=${user?.role}`}
-                  alt="User Avatar"
-                  className="w-8 h-8 rounded-full"
-                />
-              </button>
+              <div className="relative">
+                <button onClick={toggleDropdown} className="py-2 px-3 rounded-md">
+                  <img
+                    src={`https://i.pravatar.cc/150?u=${user?.role}`}
+                    alt="User Avatar"
+                    className="w-8 h-8 rounded-full"
+                  />
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-neutral-800 border border-neutral-700/80 rounded-md shadow-lg">
+                    <ul>
+                      <li className="px-4 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer">
+                        <a href="/settings" className="text-black">Configuración</a>
+                      </li>
+                      <li
+                        onClick={logout}
+                        className="px-4 py-2 hover:bg-neutral-200 dark:hover:bg-neutral-700 cursor-pointer text-black"
+                      >
+                        Cerrar sesión
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             ) : (
               <a
                 href="/login"
@@ -63,10 +82,7 @@ const Navbar: React.FC = () => {
             </ul>
             <div className="flex space-x-6">
               {isAuthenticated ? (
-                <button
-                  onClick={logout}
-                  className="py-2 px-3 rounded-md"
-                >
+                <button onClick={logout} className="py-2 px-3 rounded-md">
                   <img
                     src={`https://i.pravatar.cc/150?u=${user?.role}`}
                     alt="User Avatar"
