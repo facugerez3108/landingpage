@@ -28,7 +28,7 @@ const IntroSection = () => {
           Documentation
         </a>
       </div>
-      <Carousel slides={slides} />
+      <Carousel />
     </div>
   );
 };

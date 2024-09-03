@@ -57,3 +57,48 @@ export const reset_password = async (password: string, token: string) => {
         throw error;
     }
 }
+
+
+export const uploadImage = async (file: File) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try{
+
+        const token = localStorage.getItem('accessToken');
+        console.log("Token enviado:", token);
+
+        const response = await axios.post(`http://localhost:3000/api/image/upload-image`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        return response.data
+    }catch(error){
+        console.error("No se logró subir la imagen", error);
+        throw error;
+    }
+}
+
+export const getImages = async () => {
+    try {
+
+        const response = await axios.get(`http://localhost:3000/api/image/get-images`)
+        return response.data;
+    }catch(error){
+ 
+        console.error("Error al obtener las imágenes", error);
+        throw error;
+    }
+}
+
+export const deleteImage = async (id: number) => {
+    try {
+        const response = await axios.delete(`http://localhost:3000/api/image/delete-image/${id}`)          
+        return response.data;
+    } catch (error) {
+        console.error("Error al borrar la imagen", error);
+        throw error;
+    }
+};
